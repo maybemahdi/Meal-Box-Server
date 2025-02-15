@@ -12,7 +12,7 @@ app.use(cors());
 
 // get started
 const getRoot = (req: Request, res: Response) => {
-  res.send("University Management is Running");
+  res.send("App is running");
 };
 app.get("/", getRoot);
 

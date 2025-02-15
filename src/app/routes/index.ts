@@ -3,7 +3,7 @@ import { Router } from "express";
 const router = Router();
 const routes = [
   {
-    path: "/api/v1/...",
+    path: "/auth/login",
     // destination: controller,
   },
 ];
