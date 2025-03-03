@@ -1,8 +1,9 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
-import { AuthService } from "./auth.services";
 import config from "../../config";
+import { AuthService } from "./auth.service";
+import AppError from "../../errors/AppError";
 
 const registerUser = catchAsync(async (req, res) => {
   const result = await AuthService.registerUserIntoDB(req?.body);
@@ -17,11 +18,6 @@ const registerUser = catchAsync(async (req, res) => {
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthService.loginUser(req.body);
   const { accessToken, email, role, name, id } = result;
-
-  // Expire the previous token if it exists
-  if (req.cookies.token) {
-    res.clearCookie("token");
-  }
 
   res.cookie("token", accessToken, {
     secure: config.node_env === "production",
@@ -39,6 +35,33 @@ const loginUser = catchAsync(async (req, res) => {
       role,
       token: accessToken,
     },
+  });
+});
+
+const forgetPassword = catchAsync(async (req, res) => {
+  const email = req?.body?.email;
+  const result = await AuthService.forgetPassword(email);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Reset link has been sent!",
+    data: result,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Something went wrong !");
+  }
+
+  const result = await AuthService.resetPassword(req.body, token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password reset successfully!",
+    data: result,
   });
 });
 
@@ -65,6 +88,8 @@ const updatedUserStatus = catchAsync(async (req, res) => {
 export const AuthController = {
   registerUser,
   loginUser,
+  forgetPassword,
+  resetPassword,
   changePassword,
   updatedUserStatus,
 };

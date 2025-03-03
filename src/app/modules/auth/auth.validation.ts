@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { USER_ROLE } from "../user/user.constant";
 
 // Validation for user registration
 export const registerUserValidation = z.object({
@@ -12,8 +13,16 @@ export const registerUserValidation = z.object({
       required_error: "Email is required",
     })
     .email("Email must be a valid email address"),
-  password: z.string({
-    required_error: "Password is required",
+  phoneNumber: z.string({
+    required_error: "Phone number is required",
+  }),
+  password: z
+    .string({
+      required_error: "Password is required",
+    })
+    .min(6, "Password must be at least 6 characters long"),
+  role: z.enum([USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN], {
+    required_error: "Account type is required",
   }),
 });
 
@@ -27,6 +36,39 @@ export const loginUserValidation = z.object({
   password: z.string({
     required_error: "Password is required",
   }),
+});
+
+export const forgetPasswordValidationSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email("Email must be a valid email address"),
+});
+
+export const resetPasswordValidationSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email("Email must be a valid email address"),
+  newPassword: z
+    .string({
+      required_error: "User password is required!",
+    })
+    .min(6, "Password must be at least 6 characters long"),
+});
+export const changePasswordValidationSchema = z.object({
+  oldPassword: z
+    .string({
+      required_error: "Old password is required!",
+    })
+    .min(6, "Old Password must be at least 6 characters long"),
+  newPassword: z
+    .string({
+      required_error: "New password is required!",
+    })
+    .min(6, "New Password must be at least 6 characters long"),
 });
 
 // Types inferred from the Zod schemas

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import validateRequest from "../../middlewares/validateRequest";
-import { loginUserValidation, registerUserValidation } from "./auth.validation";
 import auth from "../../middlewares/auth";
+import { USER_ROLE } from "../user/user.constant";
+import { changePasswordValidationSchema, forgetPasswordValidationSchema, loginUserValidation, registerUserValidation, resetPasswordValidationSchema } from "./auth.validation";
 
 const AuthRoutes = Router();
 
@@ -17,13 +18,24 @@ AuthRoutes.post(
   AuthController.loginUser,
 );
 AuthRoutes.post(
+  "/forget-password",
+  validateRequest(forgetPasswordValidationSchema),
+  AuthController.forgetPassword,
+);
+AuthRoutes.post(
+  "/reset-password",
+  validateRequest(resetPasswordValidationSchema),
+  AuthController.resetPassword,
+);
+AuthRoutes.patch(
   "/change-password",
-  auth("user", "admin"),
+  auth(USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN),
+  validateRequest(changePasswordValidationSchema),
   AuthController.changePassword,
 );
 AuthRoutes.patch(
   "/update-user-status",
-  auth("admin"),
+  auth(USER_ROLE.ADMIN),
   AuthController.updatedUserStatus,
 );
 

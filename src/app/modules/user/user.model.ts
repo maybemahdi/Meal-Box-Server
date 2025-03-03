@@ -2,13 +2,19 @@ import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import { IUser, UserModel } from "./user.interface";
 import config from "../../config";
+import { USER_ROLE } from "./user.constant";
 
 const UserSchema = new Schema<IUser, UserModel>(
   {
     name: { type: String, required: [true, "name is required"] },
     email: {
       type: String,
-      required: [true, "email is required"],
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, "Phone number is required"],
       unique: true,
     },
     password: {
@@ -18,10 +24,27 @@ const UserSchema = new Schema<IUser, UserModel>(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: [USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN],
+      required: [true, "Account type is required"],
     },
-    isBlocked: {
+    otp: {
+      type: String,
+      select: false,
+    },
+    otpExpiredAt: {
+      type: Date,
+      select: false,
+    },
+    status: {
+      type: String,
+      enum: ["ACTIVE", "BLOCKED"],
+      default: "ACTIVE",
+    },
+    passwordChangedAt: {
+      type: Date,
+      select: false,
+    },
+    isDeleted: {
       type: Boolean,
       default: false,
     },
@@ -50,6 +73,10 @@ UserSchema.post("save", function (doc, next) {
 
 UserSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
   return await User.findOne({ email }).select("+password");
+};
+
+UserSchema.statics.isUserExistsByCustomId = async function (id: string) {
+  return await User.findById(id).select("+password");
 };
 
 UserSchema.statics.isPasswordMatched = async function (

@@ -4,7 +4,7 @@ import AuthRoutes from "../modules/auth/auth.route";
 const router = Router();
 const routes = [
   {
-    path: "/auth/login",
+    path: "/auth",
     destination: AuthRoutes,
   },
 ];

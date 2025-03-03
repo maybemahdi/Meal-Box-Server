@@ -13,12 +13,12 @@ const auth = (...requiredRoles: IUserRole[]) => {
     const authHeader = req.headers.authorization;
 
     // Check if the token is missing
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
     }
 
     // Extract the token
-    const token = authHeader.split(" ")[1];
+    const token = authHeader;
 
     // checking if the given token is valid
     let decoded: JwtPayload;
@@ -42,11 +42,13 @@ const auth = (...requiredRoles: IUserRole[]) => {
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, "User not found!");
     }
-
-    const isBlocked = user?.isBlocked;
-
+    const isBlocked = user?.status === "BLOCKED";
+    const isDeleted = user?.isDeleted;
     if (isBlocked) {
       throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!");
+    }
+    if (isDeleted) {
+      throw new AppError(httpStatus.NOT_FOUND, "No user exists!");
     }
 
     if (requiredRoles && !requiredRoles.includes(role)) {

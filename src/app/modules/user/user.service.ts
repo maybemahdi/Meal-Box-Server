@@ -5,6 +5,6 @@ const getAllUsers = async () => {
   return result;
 };
 
-export const UserServices = {
+export const UserService = {
   getAllUsers,
 };
