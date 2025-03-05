@@ -5,10 +5,6 @@ import { USER_ROLE } from "./user.constant";
 
 const UserRoutes = Router();
 
-UserRoutes.get(
-  "/",
-  auth(USER_ROLE.ADMIN),
-  UserController.getAllUsers,
-);
+UserRoutes.get("/", auth(USER_ROLE.ADMIN), UserController.getAllUsers);
 
 export default UserRoutes;

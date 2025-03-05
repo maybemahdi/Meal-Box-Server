@@ -3,7 +3,13 @@ import { AuthController } from "./auth.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.constant";
-import { changePasswordValidationSchema, forgetPasswordValidationSchema, loginUserValidation, registerUserValidation, resetPasswordValidationSchema } from "./auth.validation";
+import {
+  changePasswordValidationSchema,
+  forgetPasswordValidationSchema,
+  loginUserValidation,
+  registerUserValidation,
+  resetPasswordValidationSchema,
+} from "./auth.validation";
 
 const AuthRoutes = Router();
 

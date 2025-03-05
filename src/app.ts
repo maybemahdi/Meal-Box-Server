@@ -8,7 +8,13 @@ const app: Application = express();
 
 // middlewares and parser
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  }),
+);
 
 // get started
 const getRoot = (req: Request, res: Response) => {

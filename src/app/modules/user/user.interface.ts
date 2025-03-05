@@ -29,7 +29,7 @@ export interface UserModel extends Model<IUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
-  
+
   //instance methods for checking if JWT was issued before password changed
   isJWTIssuedBeforePasswordChanged(
     passwordChangedTimestamp: Date,
