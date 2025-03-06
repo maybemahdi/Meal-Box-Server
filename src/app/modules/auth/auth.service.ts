@@ -42,9 +42,9 @@ const loginUser = async (payload: ILoginUser) => {
   }
   // checking if the user is already deleted
 
-  const isBlocked = user?.isBlocked;
+  const userStatus = user?.status;
 
-  if (isBlocked) {
+  if (userStatus === "BLOCKED") {
     throw new AppError(httpStatus.UNAUTHORIZED, "This user is blocked!");
   }
 
