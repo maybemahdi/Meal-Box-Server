@@ -35,7 +35,7 @@ AuthRoutes.post(
 );
 AuthRoutes.patch(
   "/change-password",
-  auth(USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN),
+  auth(USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER, USER_ROLE.ADMIN),
   validateRequest(changePasswordValidationSchema),
   AuthController.changePassword,
 );

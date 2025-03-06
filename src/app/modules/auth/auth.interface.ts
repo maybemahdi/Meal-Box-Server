@@ -9,4 +9,5 @@ export interface IRegisterUser {
 export interface ILoginUser {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }

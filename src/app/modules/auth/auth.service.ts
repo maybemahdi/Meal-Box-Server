@@ -71,7 +71,7 @@ const loginUser = async (payload: ILoginUser) => {
   const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
+    payload?.rememberMe ? "7d" : (config.jwt_access_expires_in as string),
   );
 
   return {
@@ -143,7 +143,7 @@ const forgetPassword = async (email: string) => {
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #3B82F6;
+            color: #15803D;
         }
         .message {
             font-size: 16px;
@@ -152,7 +152,7 @@ const forgetPassword = async (email: string) => {
         }
         .btn {
             display: inline-block;
-            background: #3B82F6;
+            background: #15803D;
             color: #ffffff !important;
             padding: 12px 20px;
             text-decoration: none;
@@ -162,7 +162,7 @@ const forgetPassword = async (email: string) => {
             transition: 0.3s;
         }
         .btn:hover {
-            background: #2563eb;
+            background: #15803D;
         }
         .footer {
             margin-top: 20px;
@@ -175,7 +175,8 @@ const forgetPassword = async (email: string) => {
     <div class="container">
         <div class="logo">MealBox</div>
         <p class="message">We received a request to reset your password. Click the button below to set a new password.</p>
-        <a href=${resetUILink} class="btn">Reset Password</a>
+        <a href=${resetUILink} target="_blank" class="btn">Reset Password</a>
+        <p class="message">The Link will be valid for 10 minutes.</p>
         <p class="message">If you didn't request this, you can ignore this email.</p>
         <p class="footer">&copy; ${new Date().getFullYear()} MealBox. All rights reserved.</p>
     </div>
@@ -193,6 +194,19 @@ const resetPassword = async (
   payload: { email: string; newPassword: string },
   token: string,
 ) => {
+  // checking if the given token is valid
+  let decoded: JwtPayload = {} as JwtPayload;
+  try {
+    decoded = jwt.verify(
+      token,
+      config.jwt_access_secret as string,
+    ) as JwtPayload;
+  } catch (error: any) {
+    if (error.name === "TokenExpiredError") {
+      throw new AppError(httpStatus.FORBIDDEN, "Token has expired!");
+    }
+  }
+
   // checking if the user is exist
   const user = await User.isUserExistsByCustomEmail(payload?.email);
 
@@ -213,15 +227,7 @@ const resetPassword = async (
     throw new AppError(httpStatus.FORBIDDEN, "This user is blocked!");
   }
 
-  const decoded = jwt.verify(
-    token,
-    config.jwt_access_secret as string,
-  ) as JwtPayload;
-
-  //localhost:3000?email=something@gmail.com&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI4NTA2MTcsImV4cCI6MTcwMjg1MTIxN30.-T90nRaz8-KouKki1DkCSMAbsHyb9yDi0djZU3D6QO4
-
-  if (payload.email !== decoded.email) {
-    console.log(payload.email, decoded.email);
+  if (payload?.email !== decoded.email) {
     throw new AppError(httpStatus.FORBIDDEN, "Unauthorized Attempt!");
   }
 

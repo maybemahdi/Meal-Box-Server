@@ -33,7 +33,7 @@ const loginUser = catchAsync(async (req, res) => {
       name,
       email,
       role,
-      token: accessToken,
+      accessToken: accessToken,
     },
   });
 });
@@ -44,7 +44,7 @@ const forgetPassword = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Reset link has been sent!",
+    message: "Password Reset link has been sent!",
     data: result,
   });
 });

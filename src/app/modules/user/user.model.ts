@@ -24,7 +24,7 @@ const UserSchema = new Schema<IUser, UserModel>(
     },
     role: {
       type: String,
-      enum: [USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN],
+      enum: [USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER, USER_ROLE.ADMIN],
       required: [true, "Account type is required"],
     },
     otp: {

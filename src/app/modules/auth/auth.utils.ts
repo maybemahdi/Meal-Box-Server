@@ -18,9 +18,8 @@ export const createToken = (
   secret: string,
   expiresIn: any,
 ): string => {
-  // Define the options explicitly
   const options: SignOptions = {
-    expiresIn, // Timespan for token expiration (e.g., "1d", "1h")
+    expiresIn,
   };
 
   return jwt.sign(jwtPayload, secret, options);

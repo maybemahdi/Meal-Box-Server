@@ -23,12 +23,9 @@ const userValidationSchema = z
         required_error: "Password is required",
       })
       .min(6, "Password must be at least 6 characters long"),
-    role: z.enum(
-      [USER_ROLE.CUSTOMER, USER_ROLE.MEAL_PROVIDER, USER_ROLE.ADMIN],
-      {
-        required_error: "Account type is required",
-      },
-    ),
+    role: z.enum([USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER, USER_ROLE.ADMIN], {
+      required_error: "Account type is required",
+    }),
     isBlocked: z.boolean().optional().default(false),
     isDeleted: z.boolean().optional().default(false),
   })
