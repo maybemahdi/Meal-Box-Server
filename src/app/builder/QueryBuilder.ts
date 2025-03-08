@@ -43,6 +43,23 @@ class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+  async getMetaData() {
+    // Clone the query to count documents separately
+    const countQuery = this.modelQuery.clone();
+
+    const totalCount = await countQuery.countDocuments(); // Get total count of documents
+    const totalPages = Math.ceil(
+      totalCount / (Number(this?.query?.limit) || 1),
+    );
+    const currentPage = Number(this?.query?.page) || 1;
+
+    return {
+      totalCount,
+      page: currentPage,
+      limit: Number(this?.query?.limit) || 1,
+      totalPages,
+    };
+  }
 }
 
 export default QueryBuilder;

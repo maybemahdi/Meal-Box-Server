@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 
 export interface IUser {
@@ -10,6 +10,8 @@ export interface IUser {
   phoneNumber: string;
   password: string;
   role: string;
+  dietaryPreferences: string[]; // for customers
+  cuisineSpecialties: string[]; // for providers
   otp?: string;
   otpExpiredAt?: Date;
   status?: string;
@@ -22,7 +24,7 @@ export interface UserModel extends Model<IUser> {
   isUserExistsByCustomEmail(email: string): Promise<IUser>;
 
   //instance methods for checking if the user exist by id
-  isUserExistsByCustomId(id: string): Promise<IUser>;
+  isUserExistsByCustomId(id: string | Types.ObjectId): Promise<IUser>;
 
   //instance methods for checking if passwords are matched
   isPasswordMatched(
