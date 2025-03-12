@@ -12,9 +12,12 @@ class QueryBuilder<T> {
   search(searchableFields: string[]) {
     const searchTerm = (this.query?.searchTerm as string) || "";
     this.modelQuery = this.modelQuery.find({
-      $or: searchableFields.map((field) => ({
-        [field]: { $regex: searchTerm, $options: "i" },
-      })),
+      $or: searchableFields.map(
+        (field) =>
+          field === "ingredients"
+            ? { ingredients: { $in: [new RegExp(searchTerm, "i")] } } // Search in the array
+            : { [field]: { $regex: searchTerm, $options: "i" } }, // Normal text search
+      ),
     });
     return this;
   }
@@ -22,12 +25,26 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query };
     const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
+
+    // Handle filtering by availability
+    if (this.query.availability === "Available") {
+      queryObj.availability = true;
+    }
+    if (this.query.availability === "Not Available") {
+      queryObj.availability = false;
+    }
+    if (this.query.availability === "All") {
+      delete queryObj["availability"]
+    }
+
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
     return this;
   }
   sort() {
-    const sort = (this.query?.sort as string) || "-createdAt";
-    this.modelQuery = this.modelQuery.sort(sort);
+    if (this.query.sort) {
+      const sortBy = this.query.sort === "h2l" ? "ratings" : "-ratings"; // High to low or low to high
+      this.modelQuery = this.modelQuery.sort(sortBy);
+    }
     return this;
   }
   paginate() {

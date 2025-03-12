@@ -4,7 +4,7 @@ import { USER_ROLE } from "../user/user.constant";
 import { upload } from "../../utils/sendImageToCloudinary";
 import { MealController } from "./meal.controller";
 import validateRequest from "../../middlewares/validateRequest";
-import { createMealValidation } from "./meal.validation";
+import { createMealValidation, updateMealValidation } from "./meal.validation";
 
 const MealRoutes = Router();
 
@@ -30,6 +30,18 @@ MealRoutes.get(
   "/:id",
   auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
   MealController.getSingleMeal,
+);
+
+MealRoutes.patch(
+  "/:id",
+  auth(USER_ROLE.PROVIDER),
+  upload.single("image"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  validateRequest(updateMealValidation),
+  MealController.updateMeal,
 );
 
 export default MealRoutes;
