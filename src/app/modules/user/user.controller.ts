@@ -7,7 +7,17 @@ const getAllUsers = catchAsync(async (req, res) => {
   const result = await UserService.getAllUsers();
   sendResponse(res, {
     success: true,
-    message: "Shipping Status Updated",
+    message: "Users retrieved successfully",
+    statusCode: httpStatus.OK,
+    data: result,
+  });
+});
+
+const getMe = catchAsync(async (req, res) => {
+  const result = await UserService.getMe(req?.user);
+  sendResponse(res, {
+    success: true,
+    message: "Get me retrieved successfully",
     statusCode: httpStatus.OK,
     data: result,
   });
@@ -15,4 +25,5 @@ const getAllUsers = catchAsync(async (req, res) => {
 
 export const UserController = {
   getAllUsers,
+  getMe,
 };

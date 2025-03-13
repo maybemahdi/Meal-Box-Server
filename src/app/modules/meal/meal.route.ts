@@ -22,7 +22,7 @@ MealRoutes.post(
 
 MealRoutes.get(
   "/",
-  auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
+  // auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
   MealController.getAllMeal,
 );
 
