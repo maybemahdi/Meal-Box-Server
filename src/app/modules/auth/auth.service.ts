@@ -13,10 +13,7 @@ import bcrypt from "bcrypt";
 const registerUserIntoDB = async (payload: IRegisterUser) => {
   // checking if the user is exist
   const user = await User.isUserExistsByCustomEmail(payload?.email);
-  const isPhoneExists = await User.findOne({
-    phoneNumber: [payload?.phoneNumber],
-  });
-  if (user || isPhoneExists) {
+  if (user) {
     throw new AppError(httpStatus.CONFLICT, "User already exists!");
   }
   if (payload?.role === USER_ROLE.ADMIN) {

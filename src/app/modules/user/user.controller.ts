@@ -23,7 +23,29 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
+const updateCustomerProfile = catchAsync(async (req, res) => {
+  const result = await UserService.updateCustomerProfile(req.body, req.user);
+  sendResponse(res, {
+    success: true,
+    message: "Profile updated successfully",
+    statusCode: httpStatus.OK,
+    data: result,
+  });
+})
+
+const updateProviderProfile = catchAsync(async (req, res) => {
+  const result = await UserService.updateProviderProfile(req.body, req.user);
+  sendResponse(res, {
+    success: true,
+    message: "Profile updated successfully",
+    statusCode: httpStatus.OK,
+    data: result,
+  });
+})
+
 export const UserController = {
   getAllUsers,
   getMe,
+  updateCustomerProfile,
+  updateProviderProfile,
 };

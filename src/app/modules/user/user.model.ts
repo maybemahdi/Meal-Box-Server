@@ -15,7 +15,6 @@ const UserSchema = new Schema<IUser, UserModel>(
     phoneNumber: {
       type: String,
       required: [true, "Phone number is required"],
-      unique: true,
     },
     password: {
       type: String,
@@ -27,8 +26,8 @@ const UserSchema = new Schema<IUser, UserModel>(
       enum: [USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER, USER_ROLE.ADMIN],
       required: [true, "Account type is required"],
     },
-    dietaryPreferences: [String], // for customers
-    cuisineSpecialties: [String], // for providers
+    dietaryPreferences: [String],
+    cuisineSpecialties: [String],
     otp: {
       type: String,
       select: false,
@@ -77,7 +76,9 @@ UserSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
   return await User.findOne({ email }).select("+password");
 };
 
-UserSchema.statics.isUserExistsByCustomId = async function (id: string | Types.ObjectId) {
+UserSchema.statics.isUserExistsByCustomId = async function (
+  id: string | Types.ObjectId,
+) {
   return await User.findById(id).select("+password");
 };
 
