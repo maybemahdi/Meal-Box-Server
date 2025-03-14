@@ -143,7 +143,7 @@ const forgetPassword = async (email: string) => {
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #15803D;
+            color: #059669;
         }
         .message {
             font-size: 16px;
@@ -152,7 +152,7 @@ const forgetPassword = async (email: string) => {
         }
         .btn {
             display: inline-block;
-            background: #15803D;
+            background: #059669;
             color: #ffffff !important;
             padding: 12px 20px;
             text-decoration: none;
@@ -162,7 +162,7 @@ const forgetPassword = async (email: string) => {
             transition: 0.3s;
         }
         .btn:hover {
-            background: #15803D;
+            background: #059669;
         }
         .footer {
             margin-top: 20px;

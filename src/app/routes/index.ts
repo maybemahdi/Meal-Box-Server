@@ -4,6 +4,7 @@ import ContactRoutes from "../modules/contact/contact.route";
 import MealRoutes from "../modules/meal/meal.route";
 import AddressRoutes from "../modules/address/address.route";
 import UserRoutes from "../modules/user/user.route";
+import OrderRoutes from "../modules/order/order.route";
 
 const router = Router();
 const routes = [
@@ -26,6 +27,10 @@ const routes = [
   {
     path: "/address",
     destination: AddressRoutes,
+  },
+  {
+    path: "/order",
+    destination: OrderRoutes,
   },
 ];
 

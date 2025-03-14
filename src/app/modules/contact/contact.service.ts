@@ -21,7 +21,7 @@ const postContactMessage = async (payload: IContact) => {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
           .header {
-            background-color: #3b82f6;
+            background-color: #059669;
             color: #ffffff;
             padding: 10px;
             text-align: center;
