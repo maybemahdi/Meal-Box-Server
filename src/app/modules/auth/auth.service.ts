@@ -23,6 +23,26 @@ const registerUserIntoDB = async (payload: IRegisterUser) => {
     );
   }
   const result = await User.create(payload);
+  const html = `
+  <html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Our Platform!</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+  <table align="center" width="600" style="background: white; padding: 20px; border-radius: 10px;">
+    <tr>
+      <td align="center">
+        <h2 style="color: #333;">Welcome to Our Platform, ${result?.name}! 🎉</h2>
+        <p>We are excited to have you on board. You can now explore and enjoy our services.</p>
+        <p>Need help? <a href=${`mailto:${config.email}`} style="color: #059669;">Contact Support</a></p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+  sendEmail("Welcome Onboard", result?.email, html);
   return {
     _id: result?._id,
     name: result?.name,

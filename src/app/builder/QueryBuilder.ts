@@ -42,7 +42,7 @@ class QueryBuilder<T> {
   }
   sort() {
     if (this.query.sort) {
-      const sortBy = this.query.sort === "h2l" ? "ratings" : "-ratings"; // High to low or low to high
+      const sortBy = this.query.sort === "h2l" ? "-ratings" : "ratings"; // High to low or low to high
       this.modelQuery = this.modelQuery.sort(sortBy);
     }
     return this;
