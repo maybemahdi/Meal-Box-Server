@@ -34,7 +34,7 @@ class QueryBuilder<T> {
       queryObj.availability = false;
     }
     if (this.query.availability === "All") {
-      delete queryObj["availability"]
+      delete queryObj["availability"];
     }
 
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);

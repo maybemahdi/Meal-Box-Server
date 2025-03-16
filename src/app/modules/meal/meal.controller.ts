@@ -14,7 +14,7 @@ const createMeal = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: "Meal created successfully",
+    message: "Menu added successfully",
     data: result,
   });
 });

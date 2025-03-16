@@ -10,5 +10,6 @@ export interface IMeal {
   price: number;
   availability: boolean;
   ratings: number;
+  totalRatings?: number;
   isDeleted: boolean;
-} 
+}

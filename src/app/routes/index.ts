@@ -5,6 +5,7 @@ import MealRoutes from "../modules/meal/meal.route";
 import AddressRoutes from "../modules/address/address.route";
 import UserRoutes from "../modules/user/user.route";
 import OrderRoutes from "../modules/order/order.route";
+import ReviewRoutes from "../modules/review/review.route";
 
 const router = Router();
 const routes = [
@@ -31,6 +32,10 @@ const routes = [
   {
     path: "/order",
     destination: OrderRoutes,
+  },
+  {
+    path: "/review",
+    destination: ReviewRoutes,
   },
 ];
 

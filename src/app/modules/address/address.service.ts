@@ -23,7 +23,10 @@ const createAddress = async (payload: IAddress, user: Partial<IUser>) => {
   return address;
 };
 
-const updateAddress = async (payload: Partial<IAddress>, user: Partial<IUser>) => {
+const updateAddress = async (
+  payload: Partial<IAddress>,
+  user: Partial<IUser>,
+) => {
   const isUserExists = await User.isUserExistsByCustomId(user?.id);
   if (!isUserExists || isUserExists.role !== user.role) {
     throw new AppError(httpStatus.NOT_FOUND, "Access denied");
@@ -34,15 +37,19 @@ const updateAddress = async (payload: Partial<IAddress>, user: Partial<IUser>) =
   if (!isAddressExists) {
     throw new AppError(httpStatus.CONFLICT, "Address doesn't exist");
   }
-  const address = await Address.findByIdAndUpdate(isAddressExists._id, payload, {
-    new: true,
-  });
+  const address = await Address.findByIdAndUpdate(
+    isAddressExists._id,
+    payload,
+    {
+      new: true,
+    },
+  );
   return address;
 };
 
-const getMyAddress = async (user:Partial<IUser>) => {
- const isUserExists = await User.isUserExistsByCustomId(user.id);
- if (!isUserExists || isUserExists.role!== user.role) {
+const getMyAddress = async (user: Partial<IUser>) => {
+  const isUserExists = await User.isUserExistsByCustomId(user.id);
+  if (!isUserExists || isUserExists.role !== user.role) {
     throw new AppError(httpStatus.NOT_FOUND, "Access denied");
   }
   const address = await Address.findOne({
@@ -52,10 +59,10 @@ const getMyAddress = async (user:Partial<IUser>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Address not found");
   }
   return address;
-}
+};
 
 export const AddressService = {
   createAddress,
   updateAddress,
-  getMyAddress
+  getMyAddress,
 };

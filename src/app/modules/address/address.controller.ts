@@ -31,7 +31,7 @@ const getMyAddress = catchAsync(async (req, res) => {
     message: "Address retrieved successfully",
     data: result,
   });
-})
+});
 
 export const AddressController = {
   createAddress,

@@ -2,7 +2,9 @@ import { z } from "zod";
 
 export const createOrderValidationSchema = z
   .object({
-    paymentMethodId: z.string({ required_error: "PaymentMethodId is required" }),
+    paymentMethodId: z.string({
+      required_error: "PaymentMethodId is required",
+    }),
     customerId: z.string().min(1, "Customer ID is required"),
     mealId: z.string().min(1, "Meal ID is required"),
     customization: z.string().optional(), // Customization is optional

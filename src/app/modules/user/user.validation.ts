@@ -36,8 +36,10 @@ export const updateCustomerProfileValidationSchema = z
     dietaryPreferences: z.array(z.string()).optional(),
   })
   .strict();
-export const updateProviderProfileValidationSchema = z.object({
-  name: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  cuisineSpecialties: z.array(z.string()).optional(),
-}).strict();
+export const updateProviderProfileValidationSchema = z
+  .object({
+    name: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    cuisineSpecialties: z.array(z.string()).optional(),
+  })
+  .strict();

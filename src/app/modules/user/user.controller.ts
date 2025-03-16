@@ -31,7 +31,7 @@ const updateCustomerProfile = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     data: result,
   });
-})
+});
 
 const updateProviderProfile = catchAsync(async (req, res) => {
   const result = await UserService.updateProviderProfile(req.body, req.user);
@@ -41,7 +41,7 @@ const updateProviderProfile = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     data: result,
   });
-})
+});
 
 export const UserController = {
   getAllUsers,

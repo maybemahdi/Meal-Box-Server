@@ -12,6 +12,7 @@ const MealSchema = new Schema<IMeal>(
     price: { type: Number, required: [true, "Price is required"] },
     availability: Boolean,
     ratings: { type: Number, default: 0.0 },
+    totalRatings: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
