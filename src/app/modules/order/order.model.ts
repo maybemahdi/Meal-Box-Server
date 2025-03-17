@@ -17,6 +17,7 @@ const OrderSchema = new Schema<IOrder>(
       type: Schema.Types.ObjectId,
       required: [true, "Meal provider id is required"],
     },
+    amount: { type: Number, required: [true, "Amount is required"] },
     customization: String,
     schedule: { type: Date, required: [true, "Schedule Date is required"] },
     deliveryAddress: {

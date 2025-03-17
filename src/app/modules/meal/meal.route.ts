@@ -28,7 +28,7 @@ MealRoutes.get(
 
 MealRoutes.get(
   "/:id",
-  auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
+  // auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
   MealController.getSingleMeal,
 );
 
@@ -43,5 +43,7 @@ MealRoutes.patch(
   validateRequest(updateMealValidation),
   MealController.updateMeal,
 );
+
+MealRoutes.delete("/:id", auth(USER_ROLE.PROVIDER), MealController.deleteMeal);
 
 export default MealRoutes;

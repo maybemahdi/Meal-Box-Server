@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Stripe from "stripe";
 import { IOrder } from "./order.interface";
 import config from "../../config";
@@ -8,6 +9,8 @@ import httpStatus from "http-status";
 import { Meal } from "../meal/meal.model";
 import { User } from "../user/user.model";
 import { sendEmail } from "../../utils/sendEmail";
+import { USER_ROLE } from "../user/user.constant";
+import { IUser } from "../user/user.interface";
 
 const stripe = new Stripe(config.stripe_secret_key as string, {
   apiVersion: "2025-02-24.acacia",
@@ -54,7 +57,13 @@ const createOrder = async (payload: IOrder) => {
     // Step 2: Create order (without payment info yet)
     const { paymentMethodId, ...modifiedPayload } = payload;
     const order = await Order.create(
-      [{ ...modifiedPayload, mealProviderId: productToOrder.mealProviderId }],
+      [
+        {
+          ...modifiedPayload,
+          mealProviderId: productToOrder.mealProviderId,
+          amount: productToOrder.price,
+        },
+      ],
       {
         session,
       },
@@ -283,6 +292,37 @@ const createOrder = async (payload: IOrder) => {
   }
 };
 
+const getOrdersForProvider = async (
+  user: Partial<IUser>,
+  query: Record<string, unknown>,
+) => {
+  const provider = await User.findOne({
+    _id: user?.id,
+    role: USER_ROLE.PROVIDER,
+  });
+  if (!provider) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Provider who requested doesn't exist",
+    );
+  }
+  const filter: any = {};
+  if (query?.date && typeof query.date === "string") {
+    const date = new Date(query.date);
+    if (!isNaN(date.getTime())) {
+      const startOfDay = new Date(date);
+      startOfDay.setUTCHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setUTCHours(23, 59, 59, 999);
+
+      filter.schedule = { $gte: startOfDay, $lte: endOfDay };
+    }
+  }
+  const orders = await Order.find({ mealProviderId: user?.id, ...filter });
+  return orders;
+};
+
 export const OrderService = {
   createOrder,
+  getOrdersForProvider,
 };

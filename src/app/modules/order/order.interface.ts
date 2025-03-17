@@ -5,6 +5,7 @@ export interface IOrder {
   customerId: Types.ObjectId;
   mealId: Types.ObjectId;
   mealProviderId: Types.ObjectId;
+  amount: number;
   customization: string;
   schedule: Date;
   deliveryAddress: string;

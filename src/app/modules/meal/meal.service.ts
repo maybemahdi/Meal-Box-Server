@@ -80,9 +80,39 @@ const updateMeal = async (
   return result;
 };
 
+const deleteMeal = async (user: Partial<IUser>, id: string) => {
+  const provider = await User.findOne({
+    _id: user?.id,
+    role: USER_ROLE.PROVIDER,
+  });
+  if (!provider) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invalid meal provider");
+  }
+  const doesProviderOwnTheMeal = await Meal.findOne({
+    _id: id,
+    mealProviderId: user?.id,
+  });
+  if (!doesProviderOwnTheMeal) {
+    throw new AppError(httpStatus.FORBIDDEN, "You don't own this meal");
+  }
+  // Find the existing meal first
+  const existingMeal = await Meal.findById(id);
+
+  if (!existingMeal) {
+    throw new AppError(httpStatus.NOT_FOUND, "Meal not found");
+  }
+  const result = await Meal.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { new: true },
+  );
+  return result;
+};
+
 export const MealService = {
   createMeal,
   getAllMeal,
   getSingleMeal,
   updateMeal,
+  deleteMeal,
 };

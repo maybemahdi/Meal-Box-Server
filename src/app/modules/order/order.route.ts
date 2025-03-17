@@ -14,4 +14,10 @@ OrderRoutes.post(
   OrderController.createOrder,
 );
 
+OrderRoutes.get(
+  "/get-orders-for-provider",
+  auth(USER_ROLE.PROVIDER),
+  OrderController.getOrdersForProvider,
+);
+
 export default OrderRoutes;

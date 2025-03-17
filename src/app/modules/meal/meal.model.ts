@@ -1,4 +1,5 @@
-import { model, Schema } from "mongoose";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { model, Query, Schema } from "mongoose";
 import { IMeal } from "./meal.interface";
 
 const MealSchema = new Schema<IMeal>(
@@ -17,5 +18,10 @@ const MealSchema = new Schema<IMeal>(
   },
   { timestamps: true },
 );
+
+MealSchema.pre(/^find/, function (next) {
+  (this as Query<any, any>).where({ isDeleted: false });
+  next();
+});
 
 export const Meal = model<IMeal>("Meal", MealSchema);

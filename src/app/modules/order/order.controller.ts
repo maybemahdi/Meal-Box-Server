@@ -12,6 +12,17 @@ const createOrder = catchAsync(async (req, res) => {
   });
 });
 
+const getOrdersForProvider = catchAsync(async (req, res) => {
+  const result = await OrderService.getOrdersForProvider(req.user, req.query);
+  sendResponse(res, {
+    success: true,
+    message: "Orders retrieved successfully",
+    statusCode: 200,
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
+  getOrdersForProvider,
 };
