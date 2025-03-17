@@ -318,11 +318,33 @@ const getOrdersForProvider = async (
       filter.schedule = { $gte: startOfDay, $lte: endOfDay };
     }
   }
-  const orders = await Order.find({ mealProviderId: user?.id, ...filter });
+  if (query?.status && query.status !== "All") {
+    filter.status = query.status;
+  }
+  const orders = await Order.find({
+    mealProviderId: user?.id,
+    ...filter,
+  })
+    .populate("customerId")
+    .populate("mealId");
   return orders;
+};
+
+const updateOrderStatus = async (status: string, id: string) => {
+  const doesOrderExist = await Order.findById(id);
+  if (!doesOrderExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "Order not found");
+  }
+  const result = await Order.findByIdAndUpdate(
+    id,
+    { status: status },
+    { new: true },
+  );
+  return result;
 };
 
 export const OrderService = {
   createOrder,
   getOrdersForProvider,
+  updateOrderStatus,
 };

@@ -18,3 +18,9 @@ export const createOrderValidationSchema = z
     deliveryAddress: z.string().min(1, "Delivery address is required"),
   })
   .strict();
+
+export const updateOrderStatusValidationSchema = z
+  .object({
+    status: z.enum(["PENDING", "ACCEPTED", "DELIVERED", "CANCELLED"]),
+  })
+  .strict();
