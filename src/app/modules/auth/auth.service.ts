@@ -284,10 +284,7 @@ const changePassword = async (
     userForCheck.password,
   );
   if (!isPasswordMatched) {
-    return {
-      success: false,
-      message: "Old password is incorrect",
-    };
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Current password is invalid")
   }
 
   // Update the password

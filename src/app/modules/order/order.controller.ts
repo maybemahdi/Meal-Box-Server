@@ -35,8 +35,19 @@ const updateOrderStatus = catchAsync(async (req, res) => {
   });
 });
 
+const getOrdersForCustomer = catchAsync(async (req, res) => {
+  const result = await OrderService.getOrdersForCustomer(req.user, req.query);
+  sendResponse(res, {
+    success: true,
+    message: "Orders retrieved successfully",
+    statusCode: 200,
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
   getOrdersForProvider,
   updateOrderStatus,
+  getOrdersForCustomer
 };

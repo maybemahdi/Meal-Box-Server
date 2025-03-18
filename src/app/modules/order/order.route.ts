@@ -30,4 +30,10 @@ OrderRoutes.patch(
   OrderController.updateOrderStatus,
 );
 
+OrderRoutes.get(
+  "/get-orders-for-customer",
+  auth(USER_ROLE.CUSTOMER),
+  OrderController.getOrdersForCustomer,
+);
+
 export default OrderRoutes;

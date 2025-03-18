@@ -15,6 +15,7 @@ const OrderSchema = new Schema<IOrder>(
     },
     mealProviderId: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "Meal provider id is required"],
     },
     amount: { type: Number, required: [true, "Amount is required"] },

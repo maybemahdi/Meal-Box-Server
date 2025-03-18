@@ -306,7 +306,8 @@ const getOrdersForProvider = async (
       "Provider who requested doesn't exist",
     );
   }
-  const filter: any = {};
+  const filter: any = { mealProviderId: user?.id };
+
   if (query?.date && typeof query.date === "string") {
     const date = new Date(query.date);
     if (!isNaN(date.getTime())) {
@@ -314,20 +315,37 @@ const getOrdersForProvider = async (
       startOfDay.setUTCHours(0, 0, 0, 0);
       const endOfDay = new Date(date);
       endOfDay.setUTCHours(23, 59, 59, 999);
-
       filter.schedule = { $gte: startOfDay, $lte: endOfDay };
     }
   }
+
   if (query?.status && query.status !== "All") {
     filter.status = query.status;
   }
-  const orders = await Order.find({
-    mealProviderId: user?.id,
-    ...filter,
-  })
-    .populate("customerId")
-    .populate("mealId");
-  return orders;
+
+  const page = Number(query?.page) || 1;
+  const limit = Number(query?.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const [orders, total] = await Promise.all([
+    Order.find(filter)
+      .populate("mealId")
+      .populate("customerId")
+      .populate("mealProviderId")
+      .skip(skip)
+      .limit(limit),
+    Order.countDocuments(filter),
+  ]);
+
+  return {
+    meta: {
+      totalCount: total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+    orders,
+  };
 };
 
 const updateOrderStatus = async (status: string, id: string) => {
@@ -343,8 +361,65 @@ const updateOrderStatus = async (status: string, id: string) => {
   return result;
 };
 
+const getOrdersForCustomer = async (
+  user: Partial<IUser>,
+  query: Record<string, unknown>,
+) => {
+  const customer = await User.findOne({
+    _id: user?.id,
+    role: USER_ROLE.CUSTOMER,
+  });
+  if (!customer) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Customer who requested doesn't exist",
+    );
+  }
+  const filter: any = { customerId: user?.id };
+
+  if (query?.date && typeof query.date === "string") {
+    const date = new Date(query.date);
+    if (!isNaN(date.getTime())) {
+      const startOfDay = new Date(date);
+      startOfDay.setUTCHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setUTCHours(23, 59, 59, 999);
+      filter.schedule = { $gte: startOfDay, $lte: endOfDay };
+    }
+  }
+
+  if (query?.status && query.status !== "All") {
+    filter.status = query.status;
+  }
+
+  const page = Number(query?.page) || 1;
+  const limit = Number(query?.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const [orders, total] = await Promise.all([
+    Order.find(filter)
+      .populate("mealId")
+      .populate("mealProviderId")
+      .populate("customerId")
+      .skip(skip)
+      .limit(limit),
+    Order.countDocuments(filter),
+  ]);
+
+  return {
+    meta: {
+      totalCount: total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+    orders,
+  };
+};
+
 export const OrderService = {
   createOrder,
   getOrdersForProvider,
   updateOrderStatus,
+  getOrdersForCustomer,
 };
