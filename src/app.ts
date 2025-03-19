@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
@@ -20,9 +21,11 @@ app.use(
   }),
 );
 
+app.use(cookieParser());
+
 // get started
 const getRoot = (req: Request, res: Response) => {
-  res.json({statusCode: 200, success: true, message: "MealBox is running"});
+  res.json({ statusCode: 200, success: true, message: "MealBox is running" });
 };
 app.get("/", getRoot);
 
