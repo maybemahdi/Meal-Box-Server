@@ -15,5 +15,4 @@ export const updatedAddressValidationSchema = z
     pickupStreet: z.string().optional(),
     houseNo: z.string().optional(),
     city: z.string().optional(),
-  })
-  .strict();
+  });

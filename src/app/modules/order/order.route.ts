@@ -12,7 +12,7 @@ const OrderRoutes = Router();
 
 OrderRoutes.post(
   "/",
-  auth(USER_ROLE.CUSTOMER),
+  auth(USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER),
   validateRequest(createOrderValidationSchema),
   OrderController.createOrder,
 );
@@ -32,7 +32,7 @@ OrderRoutes.patch(
 
 OrderRoutes.get(
   "/get-orders-for-customer",
-  auth(USER_ROLE.CUSTOMER),
+  auth(USER_ROLE.CUSTOMER, USER_ROLE.PROVIDER, USER_ROLE.ADMIN), // Use case as --get my order for every role, but (route name mistakenly used as "get-orders-for-customer").
   OrderController.getOrdersForCustomer,
 );
 

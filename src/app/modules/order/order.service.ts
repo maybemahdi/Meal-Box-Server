@@ -367,8 +367,8 @@ const getOrdersForCustomer = async (
 ) => {
   const customer = await User.findOne({
     _id: user?.id,
-    role: USER_ROLE.CUSTOMER,
-  });
+    // role: USER_ROLE.CUSTOMER,
+  }); // Use case as --get my order for every role, but (route name mistakenly used as "get-orders-for-customer").
   if (!customer) {
     throw new AppError(
       httpStatus.UNAUTHORIZED,

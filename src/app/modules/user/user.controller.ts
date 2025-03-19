@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import { UserService } from "./user.service";
 
 const getAllUsers = catchAsync(async (req, res) => {
-  const result = await UserService.getAllUsers();
+  const result = await UserService.getAllUsers(req.query);
   sendResponse(res, {
     success: true,
     message: "Users retrieved successfully",
