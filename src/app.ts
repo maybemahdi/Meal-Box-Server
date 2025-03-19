@@ -18,7 +18,7 @@ app.use(
 
 // get started
 const getRoot = (req: Request, res: Response) => {
-  res.send("App is running");
+  res.json({statusCode: 200, success: true, message: "MealBox is running"});
 };
 app.get("/", getRoot);
 
