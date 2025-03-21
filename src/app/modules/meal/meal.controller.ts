@@ -29,6 +29,16 @@ const getAllMeal = catchAsync(async (req, res) => {
   });
 });
 
+const getAllMealByProvider = catchAsync(async (req, res) => {
+  const result = await MealService.getAllMealByProvider(req.query, req.user);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Meals retrieved successfully",
+    data: result,
+  });
+});
+
 const getSingleMeal = catchAsync(async (req, res) => {
   const result = await MealService.getSingleMeal(req.params.id);
   sendResponse(res, {
@@ -72,6 +82,7 @@ const deleteMeal = catchAsync(async (req, res) => {
 export const MealController = {
   createMeal,
   getAllMeal,
+  getAllMealByProvider,
   getSingleMeal,
   updateMeal,
   deleteMeal,

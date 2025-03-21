@@ -42,6 +42,24 @@ const getAllMeal = async (query: Record<string, unknown>) => {
   };
 };
 
+const getAllMealByProvider = async (query: Record<string, unknown>, user: Partial<IUser>) => {
+  const mealsQuery = new QueryBuilder(
+    Meal.find({ isDeleted: false, mealProviderId: user?.id }),
+    query,
+  )
+    .search(["name", "description", "ingredients"])
+    .filter()
+    .sort()
+    .paginate();
+  const meals = await mealsQuery.modelQuery.exec();
+  const meta = await mealsQuery.getMetaData();
+
+  return {
+    meta: { ...meta },
+    meals: meals,
+  };
+};
+
 const getSingleMeal = async (id: string) => {
   const meal = await Meal.findById(id);
   if (!meal) {
@@ -112,6 +130,7 @@ const deleteMeal = async (user: Partial<IUser>, id: string) => {
 export const MealService = {
   createMeal,
   getAllMeal,
+  getAllMealByProvider,
   getSingleMeal,
   updateMeal,
   deleteMeal,

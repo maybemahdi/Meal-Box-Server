@@ -27,6 +27,12 @@ MealRoutes.get(
 );
 
 MealRoutes.get(
+  "/provider",
+  auth(USER_ROLE.PROVIDER),
+  MealController.getAllMealByProvider,
+);
+
+MealRoutes.get(
   "/:id",
   // auth(USER_ROLE.PROVIDER, USER_ROLE.CUSTOMER, USER_ROLE.ADMIN),
   MealController.getSingleMeal,
